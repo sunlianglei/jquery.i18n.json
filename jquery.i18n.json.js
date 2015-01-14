@@ -15,17 +15,17 @@
     $.i18n.json = function (settings) {
         // set up settings
         var defaults = {
-            language: '',
+            language: null,
             path: '/',
             cache: false,
             encoding: 'UTF-8',
             callback: null
         };
         settings = $.extend(defaults, settings);
-        if (settings.language === null || settings.language == '') {
+        if (!settings.language) {
             settings.language = $.i18n.browserLang();
         }
-        if (settings.language === null) { settings.language = 'en'; }
+        if (!settings.language) { settings.language = 'en'; }
 
         // load and parse json file
         loadFile(settings.path + settings.language + '.json', settings);
@@ -95,6 +95,18 @@
             }
         });
     }
+    /** translate data-i18n attribute in html tag */
+    function translate() {
+        $('[data-i18n]').each(function () {
+            var $this = $(this), key = $this.attr('data-i18n');
+            $this.text($.i18n.prop(key));
+        });
+    }
+    $(function () {
+        $(function () {
+            translate();
+        });
+    });
 
 })(jQuery);
              
